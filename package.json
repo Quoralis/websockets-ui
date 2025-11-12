@@ -4,7 +4,7 @@
     "main": "dist/bundle.js",
     "type": "module",
     "scripts": {
-        "start:dev": "cross-env NODE_ENV=development nodemon --watch src --ext ts,js --exec \"node --loader ts-node/esm ./index.ts\"",
+        "start:dev": "cross-env NODE_ENV=development nodemon --watch src --ext ts,js --exec \"tsx ./index.ts\"",
         "start": "node dist/bundle.js",
         "build": "webpack --mode production",
         "lint": "eslint \"src/**/*.{ts,js}\"",
@@ -34,7 +34,7 @@
         "ts-loader": "^9.5.1",
         "ts-node": "^10.9.2",
         "ts-node-dev": "^2.0.0",
-        "tsx": "^4.19.0",
+        "tsx": "^4.20.6",
         "typescript": "^5.6.3",
         "typescript-eslint": "^8.46.4",
         "webpack": "^5.96.1",
