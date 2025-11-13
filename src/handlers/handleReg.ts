@@ -13,12 +13,12 @@ export function handleReq(socket: WebSocket, msg: RegRequest): RegResponse | und
     if (player) {
       return {
         type: 'reg',
-        data: {
+        data:JSON.stringify( {
           name,
           index: player.id,
           error: true,
           errorText: 'Player already exists',
-        },
+        }),
         id: 0,
       };
     }
@@ -35,7 +35,7 @@ export function handleReq(socket: WebSocket, msg: RegRequest): RegResponse | und
         error: false,
         errorText: 'Player created successfully',
       }),
-      id: msg.id,
+      id:0,
     };
   }
 }
