@@ -26,7 +26,6 @@ export function handleReq(socket: WebSocket, msg: RegRequest): RegResponse | und
     const newPlayer: Player = { id, name, password, wins: 0 };
     memoryDb.players.set(id, newPlayer);
     sessions.set(socket, id);
-    sessions.get(socket)
     return {
       type: 'reg',
       data: JSON.stringify({

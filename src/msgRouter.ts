@@ -1,9 +1,13 @@
 import { WebSocket } from 'ws';
 import { handleReq } from './handlers/handleReg.js';
-import { ClientToServer, RegRequest, RegResponse } from './types.js';
+import { ClientToServer } from './types.js';
 import { handleCreateRoom } from './handlers/handleCreateRoom.js';
+import { memoryDb } from './db/memoryDb.js';
+import { wws } from './ws_server/index.js';
+import { addUserToRoom } from './handlers/addUserToRoom.js';
+import { createGame } from './handlers/createGame.js';
 
-type HandlerFn = (...args: any[]) => any;
+type HandlerFn = (socket: WebSocket, msg?: any) => any;
 
 export class MsgRouter {
   private handlers: Record<string, HandlerFn> = {};
@@ -11,23 +15,48 @@ export class MsgRouter {
   constructor() {
     this.handlers['reg'] = handleReq;
     this.handlers['create_room'] = handleCreateRoom;
+    this.handlers['add_user_to_room'] = addUserToRoom;
+  }
 
+  updateRoom() {
+    const rooms = Array.from(memoryDb.rooms.values());
+    const availableRooms = rooms.filter(room => room.roomUsers.length < 2);
+    const msg = {
+      type: 'update_room',
+      data: JSON.stringify(availableRooms),
+      id: 0,
+    };
+    wws.clients.forEach((client: WebSocket) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify(msg));
+      }
+    });
   }
 
   handle(socket: WebSocket, msg: ClientToServer) {
+    const handler = this.handlers[msg.type];
     switch (msg.type) {
       case 'reg': {
-        const handler = this.handlers[msg.type];
         console.log('Incoming message:', msg);
         const res = handler(socket, msg);
-        console.log('Ответ', res);
+        console.log('Answer', res);
         socket.send(JSON.stringify(res));
+        this.updateRoom();
         break;
       }
       case 'create_room': {
-        const handler = this.handlers[msg.type];
-        const res = handler(socket);
-        socket.send(JSON.stringify(res));
+        handler(socket);
+        this.updateRoom();
+        break;
+      }
+      case 'add_user_to_room': {
+        handler(socket, msg);
+        const dataRoom = msg.data;
+        const roomId = dataRoom.indexRoom;
+        const room = memoryDb.rooms.get(roomId);
+        if (room && room.roomUsers.length === 2) {
+          createGame(roomId);
+        }
         break;
       }
 

@@ -40,8 +40,8 @@ export interface CreateRoomRequest extends BaseMessage {
 export interface AddUserToRoomRequest extends BaseMessage {
   type: 'add_user_to_room';
   data: {
-    indexRoom: number | string;
-  } | string;
+    indexRoom: string;
+  };
 }
 
 export interface CreateGameResponse extends BaseMessage {

@@ -1,46 +1,36 @@
-import { memoryDb, Room, sessions } from '../db/memoryDb.js';
+import { memoryDb, Room, RoomUser, sessions } from '../db/memoryDb.js';
 import { WebSocket } from 'ws';
 import { randomUUID } from 'node:crypto';
 import { UpdateRoomResponse } from '../types.js';
 
 export function handleCreateRoom(socket: WebSocket): UpdateRoomResponse | undefined {
   const playerId = sessions.get(socket);
-  if(!playerId){
+  const roomId = randomUUID();
+
+  if (!playerId) {
     return;
   }
-  console.log(playerId);
 
   const player = [...memoryDb.players.values()].find(p => p.id === playerId);
   if (!player) {
     console.log(' Player not found');
     return;
   }
-  const roomId = randomUUID();
+  const roomUser: RoomUser = {
+    name:player.name,
+    index:playerId,
+  };
+
 
   const room: Room = {
-    id: roomId,
-    players: [playerId],
+    roomId: roomId,
+    roomUsers:[]
   };
+  room.roomUsers.push(roomUser)
 
   memoryDb.rooms.set(roomId, room);
 
-  console.log(`Room created: ${roomId} (owner ${playerId})`);
+  console.log(`Room created: ${roomId} (owner ${playerId}),${memoryDb}`);
 
-  const response = {
-    type: 'update_room',
-    data: JSON.stringify([
-      {
-        roomId,
-        roomUsers: [
-          {
-            name: player.name,
-            index: player.id,
-          },
-        ],
-      },
-    ]),
-    id: 0,
-  } satisfies UpdateRoomResponse;
-
-  return response;
+  return;
 }

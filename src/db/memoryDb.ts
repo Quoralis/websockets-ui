@@ -8,9 +8,13 @@ export type Player = {
 }
 
 export type Room = {
-  id: string;
-  players: string[];
+  roomId: string;
+  roomUsers: RoomUser[];
 }
+export type RoomUser = {
+  name: string;
+  index: string;
+};
 
 export const memoryDb = {
   players: new Map<string, Player>(),
