@@ -5,7 +5,6 @@ import { handleCreateRoom } from './handlers/handleCreateRoom.js';
 import { memoryDb } from './db/memoryDb.js';
 import { wws } from './ws_server/index.js';
 import { addUserToRoom } from './handlers/addUserToRoom.js';
-import { createGame } from './handlers/createGame.js';
 
 type HandlerFn = (socket: WebSocket, msg?: any) => any;
 
@@ -51,12 +50,6 @@ export class MsgRouter {
       }
       case 'add_user_to_room': {
         handler(socket, msg);
-        const dataRoom = msg.data;
-        const roomId = dataRoom.indexRoom;
-        const room = memoryDb.rooms.get(roomId);
-        if (room && room.roomUsers.length === 2) {
-          createGame(roomId);
-        }
         break;
       }
 
