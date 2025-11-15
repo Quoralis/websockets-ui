@@ -74,11 +74,11 @@ export type Ship = {
 
 export interface AddShipsRequest extends BaseMessage {
   type: 'add_ships';
-  data: {
+  data: | {
     gameId: number | string;
     ships: Ship[];
     indexPlayer: number | string;
-  };
+  } | string;
 }
 
 export interface StartGameResponse extends BaseMessage {

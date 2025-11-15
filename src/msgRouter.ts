@@ -5,6 +5,7 @@ import { handleCreateRoom } from './handlers/handleCreateRoom.js';
 import { memoryDb } from './db/memoryDb.js';
 import { wws } from './ws_server/index.js';
 import { addUserToRoom } from './handlers/addUserToRoom.js';
+import { addShips } from './handlers/addShips.js';
 
 type HandlerFn = (socket: WebSocket, msg?: any) => any;
 
@@ -15,6 +16,7 @@ export class MsgRouter {
     this.handlers['reg'] = handleReq;
     this.handlers['create_room'] = handleCreateRoom;
     this.handlers['add_user_to_room'] = addUserToRoom;
+    this.handlers['add_ships'] = addShips
   }
 
   updateRoom() {
@@ -36,9 +38,7 @@ export class MsgRouter {
     const handler = this.handlers[msg.type];
     switch (msg.type) {
       case 'reg': {
-        console.log('Incoming message:', msg);
         const res = handler(socket, msg);
-        console.log('Answer', res);
         socket.send(JSON.stringify(res));
         this.updateRoom();
         break;
@@ -49,6 +49,10 @@ export class MsgRouter {
         break;
       }
       case 'add_user_to_room': {
+        handler(socket, msg);
+        break;
+      }
+      case 'add_ships': {
         handler(socket, msg);
         break;
       }

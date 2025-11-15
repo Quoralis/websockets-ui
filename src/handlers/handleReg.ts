@@ -1,4 +1,4 @@
-import { memoryDb, Player, sessions } from '../db/memoryDb.js';
+import { memoryDb, Player } from '../db/memoryDb.js';
 import { randomUUID } from 'node:crypto';
 import { RegRequest, RegResponse } from '../types.js';
 import { WebSocket } from 'ws';
@@ -25,7 +25,7 @@ export function handleReq(socket: WebSocket, msg: RegRequest): RegResponse | und
 
     const newPlayer: Player = { id, name, password, wins: 0 };
     memoryDb.players.set(id, newPlayer);
-    sessions.set(socket, id);
+    memoryDb.sessions.set(socket, id);
     return {
       type: 'reg',
       data: JSON.stringify({

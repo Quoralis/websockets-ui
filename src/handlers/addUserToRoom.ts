@@ -1,13 +1,13 @@
 import { AddUserToRoomRequest } from '../types.js';
 import { WebSocket } from 'ws';
-import { memoryDb, RoomUser, sessions } from '../db/memoryDb.js';
+import { memoryDb, RoomUser } from '../db/memoryDb.js';
 import { createGame } from './createGame.js';
 
 export function addUserToRoom(socket: WebSocket, msg: AddUserToRoomRequest) {
   if (typeof msg.data === 'string') {
     const dataRoom = JSON.parse(msg.data);
     const roomId = dataRoom.indexRoom;
-    const playerId = sessions.get(socket);
+    const playerId = memoryDb.sessions.get(socket);
 
     const player = [...memoryDb.players.values()].find(p => p.id === playerId);
     if (!player) {

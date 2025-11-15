@@ -1,10 +1,10 @@
-import { memoryDb, Room, RoomUser, sessions } from '../db/memoryDb.js';
+import { memoryDb, Room, RoomUser } from '../db/memoryDb.js';
 import { WebSocket } from 'ws';
 import { randomUUID } from 'node:crypto';
 import { UpdateRoomResponse } from '../types.js';
 
 export function handleCreateRoom(socket: WebSocket): UpdateRoomResponse | undefined {
-  const playerId = sessions.get(socket);
+  const playerId = memoryDb.sessions.get(socket);
   const roomId = randomUUID();
 
   if (!playerId) {
