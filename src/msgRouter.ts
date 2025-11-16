@@ -19,6 +19,7 @@ export class MsgRouter {
     this.handlers['add_user_to_room'] = addUserToRoom;
     this.handlers['add_ships'] = addShips
     this.handlers['attack'] = attackShips
+    // this.handlers['randomAttack'] = randomAttack
 
   }
 
@@ -63,9 +64,13 @@ export class MsgRouter {
         handler(socket, msg);
         break;
       }
+      case 'randomAttack':{
+        handler(socket, msg);
+        break;
+      }
 
       default:
-        console.log(`No handler found for type: ${msg.type}`);
+        console.log(`No handler found for type: ${msg}`);
         break;
     }
   }
