@@ -1,4 +1,5 @@
 import {WebSocket} from 'ws';
+import { Game } from '../types.js';
 
 export type Player = {
   id: string;
@@ -14,29 +15,6 @@ export type Room = {
 export type RoomUser = {
   name: string;
   index: string;
-};
-
-type Ship = {
-  position: {
-    x: number;
-    y:number;
-  };
-  direction: boolean;
-  length: number;
-  type: "small"|"medium"|"large"|"huge"
-}
-export type PlayerInGame = {
-  gamePlayerId: string;
-  globalPlayerId: string;
-  ships: Ship[];
-  ready: boolean;
-};
-
-export type Game = {
-  gameId: string;
-  roomId: string;
-  players: PlayerInGame[];
-  currentTurn?: string;
 };
 
 export const memoryDb = {

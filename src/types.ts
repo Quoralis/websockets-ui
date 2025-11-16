@@ -66,10 +66,33 @@ export interface UpdateRoomResponse extends BaseMessage {
 
 // ===== SHIPS =====
 export type Ship = {
-  position: { x: number; y: number };
+  position: {
+    x: number;
+    y:number;
+  };
   direction: boolean;
   length: number;
-  type: 'small' | 'medium' | 'large' | 'huge';
+  type: "small"|"medium"|"large"|"huge"
+  shipsCell:{
+    x: number;
+    y:number;
+    hits:boolean;
+  }[]
+  hits:number
+  kill:boolean;
+}
+
+export type PlayerInGame = {
+  gamePlayerId: string;
+  globalPlayerId: string;
+  ships: Ship[];
+  ready: boolean;
+};
+export type Game = {
+  gameId: string;
+  roomId: string;
+  players: PlayerInGame[];
+  currentTurn?: string;
 };
 
 export interface AddShipsRequest extends BaseMessage {

@@ -1,7 +1,8 @@
-import { Game, memoryDb } from '../db/memoryDb.js';
+import { memoryDb } from '../db/memoryDb.js';
 import { WebSocket } from 'ws';
 import { randomUUID } from 'node:crypto';
 import { getSocketByPlayerId } from '../utils/getSocketByPlayerId.js';
+import { Game } from '../types.js';
 
 export function createGame(roomId: string) {
   const room = memoryDb.rooms.get(roomId);
