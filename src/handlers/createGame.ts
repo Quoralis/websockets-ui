@@ -40,6 +40,7 @@ export function createGame(roomId: string) {
       },
     ],
     currentTurn: p1GameId,
+    attackedCells: []
   } as Game;
 
   memoryDb.games.set(gameId, newGame);

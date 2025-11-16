@@ -15,7 +15,7 @@ export function addShips(socket: WebSocket, msg: AddShipsRequest) {
   const player = game.players.find((p) => p.gamePlayerId === indexPlayer);
   if (!player) return;
 
-  player.ships = ships.map((ship:Ship) => {
+  player.ships = ships.map((ship: Ship) => {
     const cells = getShipCells(ship).map((c) => ({
       ...c,
       hits: false,
@@ -44,13 +44,28 @@ export function addShips(socket: WebSocket, msg: AddShipsRequest) {
       JSON.stringify({
         type: "start_game",
         data: JSON.stringify({
+          ships: p.ships,
           gameId: game.gameId,
-          yourIdPlayer: p.gamePlayerId,
-          currentTurn: game.currentTurn,
+          currentPlayerIndex: p.gamePlayerId,
         }),
         id: 0,
       })
     );
+  }
+
+  const turnMsg = {
+    type: "turn",
+    data: JSON.stringify({
+      currentPlayer: game.currentTurn,
+    }),
+    id: 0,
+  };
+
+  for (const p of game.players) {
+    const sock = getSocketByPlayerId(p.globalPlayerId);
+    if (!sock || sock.readyState !== WebSocket.OPEN) continue;
+
+    sock.send(JSON.stringify(turnMsg));  // ← ЭТО ЕДИНСТВЕННОЕ, ЧТО НЕ ХВАТАЛО
   }
 
   console.log(`Game ${gameId}: all ships set, game started`);
