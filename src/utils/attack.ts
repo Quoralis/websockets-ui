@@ -28,6 +28,10 @@ export function attack(game: Game, indexPlayer: string, x: number, y: number) {
       status = 'shot';
     }
   }
+  if (!game.attackedCells) game.attackedCells = [];
+  game.attackedCells.push({
+    x, y,
+  });
 
   for (const p of game.players) {
     const sock = getSocketByPlayerId(p.globalPlayerId);
@@ -52,6 +56,7 @@ export function attack(game: Game, indexPlayer: string, x: number, y: number) {
     );
 
     for (const pos of around) {
+      game.attackedCells.push({ x: pos.x, y: pos.y });
       for (const p of game.players) {
         const sock = getSocketByPlayerId(p.globalPlayerId);
         if (!sock || sock.readyState !== WebSocket.OPEN) continue;

@@ -93,6 +93,10 @@ export type Game = {
   roomId: string;
   players: PlayerInGame[];
   currentTurn?: string;
+  attackedCells:{
+    x: number;
+    y:number;
+  }[]
 };
 
 export interface AddShipsRequest extends BaseMessage {

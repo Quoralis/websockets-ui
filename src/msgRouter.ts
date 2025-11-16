@@ -7,6 +7,7 @@ import { wws } from './ws_server/index.js';
 import { addUserToRoom } from './handlers/addUserToRoom.js';
 import { addShips } from './handlers/addShips.js';
 import { attackShips } from './handlers/attackShips.js';
+import { randomAttack } from './handlers/randomAtack.js';
 
 type HandlerFn = (socket: WebSocket, msg?: any) => any;
 
@@ -19,7 +20,7 @@ export class MsgRouter {
     this.handlers['add_user_to_room'] = addUserToRoom;
     this.handlers['add_ships'] = addShips
     this.handlers['attack'] = attackShips
-    // this.handlers['randomAttack'] = randomAttack
+    this.handlers['randomAttack'] = randomAttack
 
   }
 
